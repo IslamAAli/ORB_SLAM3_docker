@@ -1,6 +1,8 @@
 FROM ubuntu:16.04
 MAINTAINER Islam A. Ali <islam.a.mustafa@gmail.com>
 
+
+
 # ------------------------------------------------------------------------------------------
 # Definitions
 ENV OPENCV_VERSION 3.4.1
@@ -64,6 +66,7 @@ RUN apt-get update && apt-get install -y \
 	libgstreamer-plugins-base1.0-dev \
 	libavutil-dev \
 	libavfilter-dev \
+	libboost-thread-dev \
 	libavresample-dev
 
 RUN echo "[Dockerfile Info] Installing OPENCV ......"
@@ -105,17 +108,46 @@ RUN mkdir -p ~/pangolin && \
 RUN echo "[Dockerfile Info] Installing EIGEN3 Dependencies ......"
 # none 
 RUN echo "[Dockerfile Info] Installing EIGEN3 ......"
-# installed in the pre-requisits of the opencv Library libeigen3-dev
+RUN mkdir -p ~/eigen3 && \
+	cd ~/eigen3 && \
+	git clone https://github.com/libigl/eigen.git && \
+	cd eigen && \
+	mkdir build_dir && \
+	cd build_dir && \
+  	cmake ../ && \
+  	make install
 
 
 # ------------------------------------------------------------------------------------------
 # [5] Orb-slam3
+
+RUN apt-get update && apt-get install -y \
+	libpcap-dev \
+	libssl-dev
+
 RUN echo "[Dockerfile Info] Installing ORB-SLAM3 ......"
 RUN mkdir -p ~/orbslam3 && \
 	cd ~/orbslam3 && \
-	git clone https://github.com/UZ-SLAMLab/ORB_SLAM3.git ORB_SLAM3 && \
+	git clone https://github.com/IslamAAli/ORB_SLAM3.git && \
 	cd ORB_SLAM3 && \
 	chmod +x build.sh && \
 	./build.sh   
 
 
+# ############################################################################################
+# ############################################################################################
+# ############################################################################################
+# ============================================================================================
+# -----------------------------------------------------------------------------------------
+# The following part is adapted partially from : https://github.com/jupemara/x11vnc-docker
+# -----------------------------------------------------------------------------------------
+# ============================================================================================
+
+EXPOSE 5900
+ENV \
+  DEBIAN_FRONTEND="nonintractive" \
+  X11VNC_PASSWORD="password"
+RUN apt-get update -y
+RUN apt-get install -y xvfb x11vnc fluxbox
+ADD ./entrypoint.sh /opt/entrypoint.sh
+ENTRYPOINT /opt/entrypoint.sh
