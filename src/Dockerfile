@@ -113,9 +113,20 @@ RUN mkdir -p ~/pangolin && \
 # ------------------------------------------------------------------------------------------
 # [4] Eigen3
 RUN echo "[Dockerfile Info] Installing EIGEN3 Dependencies ......"
-# none 
+RUN echo "[Dockerfile Info] Installing EIGEN3 Dependencies ......"
+# none
+# none
 RUN echo "[Dockerfile Info] Installing EIGEN3 ......"
+RUN echo "[Dockerfile Info] Installing EIGEN3 ......"
+RUN mkdir -p ~/eigen3 && \
 # installed in the pre-requisits of the opencv Library libeigen3-dev
+        cd ~/eigen3 && \
+        git clone https://github.com/libigl/eigen.git && \
+        cd eigen && \
+        mkdir build_dir && \
+        cd build_dir && \
+          cmake ../ && \
+          make install
 
 
 
