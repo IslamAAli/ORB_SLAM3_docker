@@ -10,7 +10,8 @@ ENV OPENCV_DOWNLOAD_URL https://github.com/opencv/opencv/archive/$OPENCV_VERSION
 ENV OpenCV_DIR opencv-$OPENCV_VERSION
 ENV EIGEN_VERSION 3.3.2
 ENV EIGEN_DOWNLOAD_URL http://bitbucket.org/eigen/eigen/get/$EIGEN_VERSION.tar.gz
-
+ENV PANGOLIN_VERSION 0.6
+ENV PANGOLIN_DOWNLOAD_PATH https://github.com/stevenlovegrove/Pangolin/archive/refs/tags/v$PANGOLIN_VERSION.zip
 # ------------------------------------------------------------------------------------------
 # [1] General Dependencies
 RUN echo "[Dockerfile Info] Installing GENERAL Dependencies ......"
@@ -66,7 +67,6 @@ RUN apt-get update && apt-get install -y \
 	libgstreamer-plugins-base1.0-dev \
 	libavutil-dev \
 	libavfilter-dev \
-	libboost-thread-dev \
 	libavresample-dev
 
 RUN echo "[Dockerfile Info] Installing OPENCV ......"
@@ -92,30 +92,27 @@ RUN apt-get update && apt-get install -y \
 		libdc1394-22-dev libraw1394-dev \		
 		libjpeg-dev libpng12-dev libtiff5-dev libopenexr-dev
 
+
 RUN echo "[Dockerfile Info] Installing PNGOLIN ......"
 RUN mkdir -p ~/pangolin && \
 		cd ~/pangolin && \
-		git clone https://github.com/stevenlovegrove/Pangolin.git && \
-		cd Pangolin && \
+		wget "$PANGOLIN_DOWNLOAD_PATH" && \
+		mkdir $PANGOLIN_VERSION && \
+		ls && \
+		unzip v$PANGOLIN_VERSION.zip -d $PANGOLIN_VERSION && \
+		cd $PANGOLIN_VERSION && \
+		cd Pangolin-$PANGOLIN_VERSION && \
 		mkdir build && \
 		cd build && \
-		cmake .. && \
-		cmake --build .	
-
-
+		cmake .. -DEigen3_DIR=/usr/lib/cmake/eigen3 && \
+		cmake --build .
 # ------------------------------------------------------------------------------------------
 # [4] Eigen3
 RUN echo "[Dockerfile Info] Installing EIGEN3 Dependencies ......"
 # none 
 RUN echo "[Dockerfile Info] Installing EIGEN3 ......"
-RUN mkdir -p ~/eigen3 && \
-	cd ~/eigen3 && \
-	git clone https://github.com/libigl/eigen.git && \
-	cd eigen && \
-	mkdir build_dir && \
-	cd build_dir && \
-  	cmake ../ && \
-  	make install
+# installed in the pre-requisits of the opencv Library libeigen3-dev
+
 
 
 # ------------------------------------------------------------------------------------------
