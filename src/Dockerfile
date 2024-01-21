@@ -125,7 +125,8 @@ RUN echo "[Dockerfile Info] Installing EIGEN3 ......"
 RUN apt-get update && apt-get install -y \
 	libpcap-dev \
 	libssl-dev \ 
-	libboost-dev
+	libboost-dev \
+	libeigen3-dev
 
 RUN echo "[Dockerfile Info] Installing ORB-SLAM3 ......"
 RUN mkdir -p ~/orbslam3 && \
