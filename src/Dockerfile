@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 MAINTAINER Islam A. Ali <islam.a.mustafa@gmail.com>
 
 
@@ -42,7 +42,7 @@ RUN apt-get update && apt-get install -y \
 	libavcodec-dev\
 	libavformat-dev\ 
 	libswscale-dev \
-	python3.7-dev \
+	python3.5-dev \
 	python3-numpy \
 	libtbb2 \
 	libtbb-dev
