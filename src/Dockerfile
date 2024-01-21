@@ -137,7 +137,7 @@ RUN apt-get update && apt-get install -y \
 	libpcap-dev \
 	libssl-dev \ 
 	libboost-dev \
-	libeigen3-dev
+	libboost-serialization-dev
 
 RUN echo "[Dockerfile Info] Installing ORB-SLAM3 ......"
 RUN mkdir -p ~/orbslam3 && \
